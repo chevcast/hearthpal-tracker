@@ -34,7 +34,7 @@ If you're contributing to the hearthpal tracker project and are sick of typing `
 
 > $ gulp watch
 
-When you run this task it will run the default gulp task and build the project's assets like normal. However, instead of returning to the terminal afterward, it will start a livereload server and begin monitoring all Jade, JavaScript, and Stylus files for changes. When changes are detected it will trigger the appropriate gulp tasks and reload the appliation assets in realtime :D
+Run this after running `gulp build` and it will start a livereload server. It will begin monitoring all Jade, JavaScript, and Stylus files for changes. When changes are detected it will trigger the appropriate gulp tasks and reload the appliation assets in realtime; you don't even need to restart the app in most cases.
 
 ## Deployment
 
