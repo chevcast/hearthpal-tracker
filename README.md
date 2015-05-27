@@ -4,6 +4,8 @@ A Hearthstone deck tracker application created using [nw.js](http://nwjs.io/).
 
 > NOTE: This application is in beta. If you encounter any trouble with it please come back and leave an issue in our [issue tracker](https://github.com/hearthpal/hearthpal-tracker/issues). If you're a savvy node developer then you're also welcome to submit [pull requests](https://github.com/hearthpal/hearthpal-tracker/pulls).
 
+> I'm especially looking for people to test on Windows. I'm on a Macbook Pro myself and have not tested this on Windows at all. It is designed to work with Windows but there may be bugs in need of being ironed out.
+
 ## Installers
 
 > Coming soon...
