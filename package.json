@@ -1,10 +1,10 @@
 {
-  "name": "hearthtunnel-deck-tracker",
+  "name": "@hearthpal/tracker",
   "version": "1.0.0",
   "description": "A node powered Hearthstone Deck Tracker.",
   "main": "build/index.html",
   "window": {
-    "title": "Hearthtunnel Deck Tracker",
+    "title": "Hearthpal Tracker",
     "width": 275,
     "height": 500,
     "frame": false,

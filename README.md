@@ -1,4 +1,4 @@
-# hearthtunnel
+# Hearthpal Tracker
 
 A Hearthstone deck tracker application created using [nw.js](http://nwjs.io/).
 
@@ -12,7 +12,7 @@ A Hearthstone deck tracker application created using [nw.js](http://nwjs.io/).
 
 1. Clone the repository.
 
-   > $ git clone https://github.com/chevex/hearthtunnel.git
+   > $ git clone https://github.com/hearthpal/hearthpal-tracker.git
 
 2. Install node from within the project directory.
 
@@ -30,7 +30,7 @@ After you have hacked on the project, if you would like to submit any changes ba
 
 ## Livereload
 
-If you're contributing to the hearthtunnel project and are sick of typing `gulp` and reloading the app over and over again, there is a `watch` task in the gulpfile.
+If you're contributing to the hearthpal tracker project and are sick of typing `gulp` and reloading the app over and over again, there is a `watch` task in the gulpfile.
 
 > $ gulp watch
 
