@@ -45,3 +45,9 @@ If you want to build the complete project and get binaries for Windows and OS X,
 It will run the default gulp task, build all the assets like normal, and then it will run the entire app through [node-webkit-builder](https://github.com/mllrsohn/node-webkit-builder) and generate 32 and 64 bit executables for both operating systems. The built executables will then be found in the root of the project in a "release" directory.
 
 > NOTE: I recently discovered that the deploy task doesn't work on the latest versions of node or iojs. Install node 0.10.x, then run the deploy task and it should work.
+
+## Frequently Asked Questions
+
+#### Q. Why isn't the tracker *stacking* Imps? Sometimes they appear stacked on the list, and other times they appear multiple times on the list.
+
+A. Please see [this issue](https://github.com/hearthpal/hearthpal-tracker/issues/1).
