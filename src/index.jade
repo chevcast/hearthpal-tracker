@@ -87,13 +87,12 @@ html(data-ng-app="app")
           });
       });
   body(data-ng-controller="main", data-ng-keydown="devTools($event)")
-    div.drag-fix-top
-    div.title-bar.animated {{title}}
-      div#app-controls
-        span.glyphbutton.glyphicon.glyphicon-minus#minimize-app(data-ng-click="minimizeApp()")
-        span.glyphbutton.glyphicon.glyphicon-remove#close-app(data-ng-click="closeApp()")
+    div.drag-fix
+      div.title-bar.animated {{title}}
+        div#app-controls
+          span.glyphbutton.glyphicon.glyphicon-minus#minimize-app(data-ng-click="minimizeApp()")
+          span.glyphbutton.glyphicon.glyphicon-remove#close-app(data-ng-click="closeApp()")
     div.content(data-ng-view)
     div#spinner(data-ng-show="loading === true")
       div#overlay
       img(src="./imgs/spinner.gif")
-    div.drag-fix-bottom

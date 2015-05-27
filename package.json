@@ -7,9 +7,9 @@
     "title": "Hearthpal Tracker",
     "width": 275,
     "height": 500,
-    "frame": false,
+    "frame": true,
     "toolbar": false,
-    "transparent": true
+    "transparent": false
   },
   "scripts": {
     "start": "nw"

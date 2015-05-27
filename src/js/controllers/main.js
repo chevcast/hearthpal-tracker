@@ -22,4 +22,7 @@ module.exports = function ($rootScope, $scope, mainWindow) {
       mainWindow.redraw();
     }
   });
+  $rootScope.$watch('title', function (title) {
+    mainWindow.title = title;
+  });
 };

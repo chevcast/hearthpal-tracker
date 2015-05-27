@@ -15,21 +15,6 @@ secondarycolor=#0f0
 ::-webkit-scrollbar-thumb:window-inactive
 	background-color: darken(forecolor, 75%)
 
-div.drag-fix-top, div.drag-fix-bottom
-  -webkit-app-region: no-drag
-  height:0px
-  width:100%
-  position:absolute
-  left:0
-  z-index:0
-  background:red
-
-div.drag-fix-top
-  top: 0
-
-div.drag-fix-bottom
-  bottom: 0
-
 body
   background-color: transparent
   color: forecolor
@@ -58,7 +43,10 @@ body
     opacity: 1
 
 div.title-bar
-  position: relative
+  display: none
+  position: absolute
+  top: 0
+  left: 37.5px
   -webkit-app-region: drag
   border-radius: 15px 15px 0px 0px
   cursor: move
@@ -66,7 +54,6 @@ div.title-bar
   height: 25px
   width: 200px
   line-height: 30px
-  margin: auto
   font-size: 13px
   background-color: backcolor
   text-align: center
@@ -78,20 +65,21 @@ div.title-bar
     span.glyphicon-minus
       margin-right: 10px
     span
+      -webkit-app-region: no-drag
       cursor: pointer
 
 div.content
+  -webkit-app-region: no-drag
   background-color: backcolor
   background-image: url("../imgs/background.png")
   background-attachment: fixed
   background-size: cover
   background-position: center
-  height: calc(100% - 25px)
-  width: 275px
-  top: 25px
+  height: 100%
+  width: 100%
   position: absolute
-  border: solid 5px backcolor
-  border-radius: 15px 15px 15px 15px
+  top: 0
+  //border-radius: 15px 15px 15px 15px
   backface-visibility: hidden
   transition-property: -webkit-transform
   transition-duration: .5s
