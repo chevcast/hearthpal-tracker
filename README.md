@@ -2,7 +2,7 @@
 
 A Hearthstone deck tracker application created using [nw.js](http://nwjs.io/).
 
-> NOTE: This application is still very much in development. Please be aware that some of the steps below may be broken. I put a lot of thought into the development and deployment workflow so the steps shouldn't change much, if at all, but the code isn't finished and the app currently doesn't do much aside from compile and show "hello world" :P
+> NOTE: This application is in beta. If you encounter any trouble with it please come back and leave an issue in our [issue tracker](https://github.com/hearthpal/hearthpal-tracker/issues). If you're a savvy node developer then you're also welcome to submit [pull requests](https://github.com/hearthpal/hearthpal-tracker/pulls).
 
 ## Installers
 
