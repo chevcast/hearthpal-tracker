@@ -1,7 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 var bluebird = require('bluebird');
-var extend = require('extend');
 bluebird.promisifyAll(fs);
 module.exports = function ($scope, $rootScope, utils) {
   $rootScope.title = "My Decks";

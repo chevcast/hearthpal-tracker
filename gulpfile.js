@@ -135,11 +135,19 @@ gulp.task('watch', function () {
 
 // Run all compile tasks and then build executables for the application.
 gulp.task('deploy', ['build'], function () {
+  var files = [
+    './package.json',
+    './build/**/*'
+  ];
+  var packageInfo = require('./package.json');
+  Object.keys(packageInfo.dependencies).forEach(function (dependencyName) {
+    files.push('./node_modules/' + dependencyName + '/**/*');
+  });
 
   // Instantiate Nwbuilder.
   var nw = new gulp.NwBuilder({
     version: '0.12.2',
-    files: ['./package.json', './build/**/*'], // use the glob format
+    files: files,
     platforms: ['osx32', 'osx64', 'win32', 'win64'],
     buildDir: './release'
   });
