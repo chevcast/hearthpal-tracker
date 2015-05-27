@@ -1,0 +1,16 @@
+div#new-deck
+  input#deck-name(
+    type="text",
+    data-ng-model="deckName",
+    placeholder="Enter a name..."
+  )
+  ul#class-list
+    li(data-ng-repeat="deckClass in classes")
+      div(
+        data-deck-cover,
+        data-deck-class="{{deckClass}}",
+        data-deck-name="{{deckClass}}",
+        data-ng-click="createDeck(deckClass)",
+        title="Select {{deckClass}} Class"
+      )
+  button#cancel.btn.btn-danger(data-ng-click="go('/decks')") Cancel

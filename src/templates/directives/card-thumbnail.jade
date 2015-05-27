@@ -1,0 +1,8 @@
+div.card-thumbnail(data-ng-class="{ interactive: interactive }")
+  img.card.pull-right(
+    data-ng-src="./imgs/cards/thumbnails/{{card.id}}.png",
+    data-ng-class="{ interactive: interactive }"
+  )
+  span.mana {{card.cost || 0}}
+  span.name.pull-left {{card.name}}
+  span.count(data-ng-show="cardCount > 1") {{cardCount}}

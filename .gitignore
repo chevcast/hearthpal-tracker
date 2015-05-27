@@ -1,0 +1,7 @@
+node_modules/
+build/
+src/bower_components/
+release/
+cache/
+.DS_Store
+*.vim

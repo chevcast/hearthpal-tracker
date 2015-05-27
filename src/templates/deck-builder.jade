@@ -1,0 +1,35 @@
+div#deck-builder
+  div#deckCover
+    div(
+      data-deck-cover,
+      data-deck-class="{{deck.deckClass}}",
+      data-deck-name="{{deck.name}}"
+      data-ng-if="deck"
+    )
+    span.card-count {{totalCards}} cards
+    input#deckName(type="text", data-ng-model="deck.name")
+  div#add
+    input#cardField(
+      type="text",
+      placeholder="{{ totalCards < 30 ? 'Enter card name...' : 'DECK FULL' }}",
+      data-typeahead,
+      data-suggested-card="suggestedCard",
+      data-card-selected="addCard($card)",
+      data-ng-disabled="totalCards === 30"
+    )
+    button#addCard.btn.btn-success(
+      title="Add Card",
+      data-ng-disabled="!suggestedCard || totalCards === 30",
+      data-ng-click="addCard(suggestedCard)"
+    )
+      span.glyphicon.glyphicon-plus
+  ul#cards
+    li(data-ng-repeat="card in cards | cardSort")
+      div(
+        data-card-thumbnail,
+        data-card-id="{{card.id}}",
+        data-card-count="{{card.count}}"
+      )
+      div#removeOverlay(data-ng-click="removeCard(card.id)")
+  button.btn.btn-success(data-ng-click="save()", data-ng-disabled="!deck.name") Save
+  button.btn.btn-danger(data-ng-click="cancel()") Cancel

@@ -1,0 +1,98 @@
+doctype html
+html(data-ng-app="app")
+  head
+    title Hearthtunnel Deck Tracker
+    link(href="./lib/bootstrap/dist/css/bootstrap-theme.css", rel="stylesheet")
+    link(href="./lib/bootstrap/dist/css/bootstrap.css", rel="stylesheet")
+    link(href="./css/app.css", rel="stylesheet")
+    script(src="http://localhost:35729/livereload.js")
+    script(src="./lib/jquery/dist/jquery.js")
+    script(src="./lib/typeahead.js/dist/typeahead.bundle.js")
+    script(src="./lib/angular/angular.js")
+    script(src="./lib/angular-route/angular-route.js")
+    script(src="./lib/angular-animate/angular-animate.js")
+    script.
+      global.Bloodhound = window.Bloodhound;
+      var gui = require('nw.gui');
+      var mainWindow = gui.Window.get();
+      mainWindow.setMaximumSize(275, 1000);
+      mainWindow.setMinimumSize(275, 275);
+      mainWindow.redraw = function () {
+        this.resizeTo(this.width, this.height + 1);
+        this.resizeTo(this.width, this.height - 1);
+      };
+
+      // Weird hack to fix copy/paste shortcuts on OS X.
+      if (process.platform === "darwin") {
+        var mb = new gui.Menu({type: 'menubar'});
+        mb.createMacBuiltin('RoboPaint', {
+          hideEdit: false,
+        });
+        mainWindow.menu = mb;
+      }
+
+      //-mainWindow.focus();
+      //-var devTools = mainWindow.showDevTools();
+
+      // Clear module cache so livereload works with required modules.
+      Object.keys(global.require.cache).forEach(function (key) {
+        delete global.require.cache[key];
+      });
+
+      // Delcare our Angular app and relevant components.
+      var app = angular.module('app', ['ngRoute', 'ngAnimate']);
+      app.factory('mainWindow', function () {
+        return mainWindow;
+      });
+      app.factory('utils', require('./js/services/utils.js'));
+      app.factory('cards', require('./js/services/cards.js'));
+      app.filter('cardSort', require('./js/filters/card-sort.js'));
+      app.filter('collectible', require('./js/filters/collectible.js'));
+      app.directive('deckCover', require('./js/directives/deck-cover.js'));
+      app.directive('cardThumbnail', require('./js/directives/card-thumbnail.js'));
+      app.directive('typeahead', require('./js/directives/typeahead.js'));
+      app.controller('main', require('./js/controllers/main.js'));
+      app.controller('confirm', require('./js/controllers/confirm.js'));
+      app.controller('decks', require('./js/controllers/decks.js'));
+      app.controller('newDeck', require('./js/controllers/new-deck.js'));
+      app.controller('deckBuilder', require('./js/controllers/deck-builder.js'));
+      app.controller('deckTracker', require('./js/controllers/deck-tracker.js'));
+
+      // Configure Angular app routes.
+      app.config(function ($routeProvider) {
+        $routeProvider
+          .when('/decks', {
+            templateUrl: './templates/decks.html',
+            controller: 'decks'
+          })
+          .when('/confirm', {
+            templateUrl: './templates/confirm.html',
+            controller: 'confirm'
+          })
+          .when('/new-deck', {
+            templateUrl: './templates/new-deck.html',
+            controller: 'newDeck'
+          })
+          .when('/deck-builder/:mode/:deckFile', {
+            templateUrl: './templates/deck-builder.html',
+            controller: 'deckBuilder'
+          })
+          .when('/deck-tracker/:deckFile', {
+            templateUrl: './templates/deck-tracker.html',
+            controller: 'deckTracker'
+          })
+          .otherwise({
+            redirectTo: '/decks'
+          });
+      });
+  body(data-ng-controller="main", data-ng-keydown="devTools($event)")
+    div.drag-fix-top
+    div.title-bar.animated {{title}}
+      div#app-controls
+        span.glyphbutton.glyphicon.glyphicon-minus#minimize-app(data-ng-click="minimizeApp()")
+        span.glyphbutton.glyphicon.glyphicon-remove#close-app(data-ng-click="closeApp()")
+    div.content(data-ng-view)
+    div#spinner(data-ng-show="loading === true")
+      div#overlay
+      img(src="./imgs/spinner.gif")
+    div.drag-fix-bottom

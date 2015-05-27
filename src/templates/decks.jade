@@ -1,0 +1,18 @@
+div#decks
+  ul#decks-list
+    li.text-center(data-ng-show="decks.length === 0")
+      h3 No decks.
+    li(data-ng-repeat="deck in decks track by $index")
+      div(
+        data-deck-cover,
+        data-deck-class="{{deck.deckClass}}",
+        data-deck-name="{{deck.name}}",
+        data-deck-file="{{deck.fileName}}",
+        data-interactive="true",
+        data-ng-click="go('/deck-tracker/' + deck.fileName)",
+        title="Select {{deck.name}} Deck"
+      )
+  span.new-deck.glyphicon.glyphicon-plus(
+    data-ng-click="go('/new-deck')",
+    title="Add New Deck"
+  )
