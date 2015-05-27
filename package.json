@@ -20,7 +20,7 @@
     "bluebird": "^2.9.26",
     "extend": "^2.0.1",
     "hearthstone-log-watcher": "^2.0.3",
-    "lodash": "^3.9.2",
+    "lodash": "^3.9.3",
     "mongoose": "^4.0.3",
     "nw": "^0.12.2"
   },

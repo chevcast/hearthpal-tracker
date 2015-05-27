@@ -4,7 +4,7 @@ gulp.jade = require('gulp-jade');
 gulp.stylus = require('gulp-stylus');
 gulp.bower = require('gulp-bower');
 gulp.livereload = require('gulp-livereload');
-gulp.nwBuilder = require('node-webkit-builder');
+gulp.NwBuilder = require('node-webkit-builder');
 gulp.jsonEditor = require('gulp-json-editor');
 gulp.rename = require('gulp-rename');
 gulp.uglify = require('gulp-uglify');
@@ -131,7 +131,7 @@ gulp.task('watch', function () {
 // Run all compile tasks and then build executables for the application.
 gulp.task('deploy', ['build'], function () {
   // Instantiate Nwbuilder.
-  var nw = new NwBuilder({
+  var nw = new gulp.NwBuilder({
     files: ['./package.json', './build/**/*'], // use the glob format
     platforms: ['osx32', 'osx64', 'win32', 'win64'],
     buildDir: './release'
