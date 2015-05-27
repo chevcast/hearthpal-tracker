@@ -1,5 +1,6 @@
 var path = require('path');
 var gulp = require('gulp');
+var argv = require('yargs').argv;
 gulp.jade = require('gulp-jade');
 gulp.stylus = require('gulp-stylus');
 gulp.bower = require('gulp-bower');
@@ -26,7 +27,11 @@ gulp.task('build', [
 gulp.task('compile-html', function () {
   // Compile the index file.
   var indexTemplate = gulp.src('./src/index.jade')
-    .pipe(gulp.jade())
+    .pipe(gulp.jade({
+      locals: {
+        env: argv.production ? 'production' : 'development'
+      }
+    }))
     .pipe(gulp.dest('./build'))
     .pipe(gulp.livereload());
 
@@ -130,8 +135,10 @@ gulp.task('watch', function () {
 
 // Run all compile tasks and then build executables for the application.
 gulp.task('deploy', ['build'], function () {
+
   // Instantiate Nwbuilder.
   var nw = new gulp.NwBuilder({
+    version: '0.12.2',
     files: ['./package.json', './build/**/*'], // use the glob format
     platforms: ['osx32', 'osx64', 'win32', 'win64'],
     buildDir: './release'
