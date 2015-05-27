@@ -16,7 +16,7 @@ html(data-ng-app="app")
       global.Bloodhound = window.Bloodhound;
       var gui = require('nw.gui');
       var mainWindow = gui.Window.get();
-      mainWindow.setMaximumSize(275, 1000);
+      mainWindow.setMaximumSize(275, 3000);
       mainWindow.setMinimumSize(275, 275);
       mainWindow.redraw = function () {
         this.resizeBy(0, 1);
