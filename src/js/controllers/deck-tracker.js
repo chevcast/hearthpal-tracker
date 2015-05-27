@@ -338,7 +338,9 @@ module.exports = function ($rootScope, $scope, $routeParams, mainWindow, cards, 
   });
 
   // Detect when game has finished and clean up data.
-  logWatcher.on('game-over', console.log.bind(console)); 
+  logWatcher.on('game-over', function (players) {
+    mainWindow.reload();
+  });
 
   logWatcher.start();
 
