@@ -14,11 +14,11 @@ A Hearthstone deck tracker application created using [nw.js](http://nwjs.io/).
 
    > $ git clone https://github.com/hearthpal/hearthpal-tracker.git
 
-2. Install node from within the project directory.
+2. Install dependencies.
 
    > $ npm install
 
-3. Build project assets using [gulp](http://gulpjs.com/).
+3. Build project assets using [gulp](http://gulpjs.com/). (`npm install gulp -g`)
 
    > $ gulp build
 
