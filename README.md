@@ -28,7 +28,7 @@ A Hearthstone deck tracker application created using [nw.js](http://nwjs.io/).
    **Windows:**  
    http://www.imagemagick.org/script/binary-releases.php
 
-3. Build project assets using [gulp](http://gulpjs.com/). (`npm install gulp -g`)
+4. Build project assets using [gulp](http://gulpjs.com/). (`npm install gulp -g`)
 
    > $ gulp build
 
