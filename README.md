@@ -19,6 +19,14 @@ A Hearthstone deck tracker application created using [nw.js](http://nwjs.io/).
 2. Install dependencies.
 
    > $ npm install
+   
+3. Install ImageMagick so that gulp can crop the Hearthstone card image files.
+
+   **Mac OSX:**  
+   > $ brew install imagemagick
+   
+   **Windows:**  
+   http://www.imagemagick.org/script/binary-releases.php
 
 3. Build project assets using [gulp](http://gulpjs.com/). (`npm install gulp -g`)
 
