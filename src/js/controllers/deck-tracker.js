@@ -339,12 +339,15 @@ module.exports = function ($rootScope, $scope, $routeParams, mainWindow, cards, 
 
   // Detect when game has finished and clean up data.
   logWatcher.on('game-over', function (players) {
+    logWatcher.removeAllListeners();
+    logWatcher.stop();
     mainWindow.reload();
   });
 
   logWatcher.start();
 
   $scope.done = function () {
+    logWatcher.removeAllListeners();
     logWatcher.stop();
     utils.navigate('/decks');
   };
