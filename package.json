@@ -17,26 +17,26 @@
   "author": "chevex",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^2.9.26",
+    "bluebird": "^2.9.30",
     "hearthstone-log-watcher": "^2.0.3",
     "lodash": "^3.9.3"
   },
   "devDependencies": {
     "colors": "^1.1.0",
-    "gulp": "^3.8.11",
+    "gulp": "^3.9.0",
     "gulp-bower": "0.0.10",
     "gulp-gm": "0.0.7",
     "gulp-jade": "^1.0.1",
     "gulp-json-editor": "^2.2.1",
     "gulp-livereload": "^3.8.0",
-    "gulp-minify-css": "^1.1.1",
+    "gulp-minify-css": "^1.1.6",
     "gulp-rename": "^1.2.2",
-    "gulp-stylus": "^2.0.2",
+    "gulp-stylus": "^2.0.4",
     "gulp-uglify": "^1.2.0",
     "merge-stream": "^0.1.7",
-    "node-webkit-builder": "^1.0.11",
+    "node-webkit-builder": "^1.0.12",
     "nw": "^0.12.2",
-    "request": "^2.55.0",
-    "yargs": "^3.9.1"
+    "request": "^2.57.0",
+    "yargs": "^3.10.0"
   }
 }

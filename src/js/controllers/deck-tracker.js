@@ -10,225 +10,74 @@ module.exports = function ($rootScope, $scope, $routeParams, mainWindow, cards, 
   $scope.opposingName = "Opposing Player";
   $scope.deck = require(path.join(decksPath, $routeParams.deckFile));
 
-  // Tracking arrays.
-  $scope.friendlyDeck = [];
-  $scope.friendlyHand = [];
-  $scope.friendlyPlay = [];
-  $scope.friendlyGraveyard = [];
-  $scope.opposingDeck = [];
-  $scope.opposingHand = [];
-  $scope.opposingPlay = [];
-  $scope.opposingGraveyard = [];
-
-  // Zone display arrays.
-  $scope.friendlyDeckZone = [];
-  $scope.friendlyHandZone = [];
-  $scope.friendlyPlayZone = [];
-  $scope.friendlyGraveyardZone = [];
-  $scope.opposingDeckZone = [];
-  $scope.opposingHandZone = [];
-  $scope.opposingPlayZone = [];
-  $scope.opposingGraveyardZone = [];
-
   // Monitor tracking arrays and update zone display arrays.
-  $scope.$watchCollection('friendlyDeck', function (friendlyDeck) {
-    $scope.friendlyDeckZone.length = 0;
-    friendlyDeck.forEach(function (card) {
-      var cardExists = false;
-      $scope.friendlyDeckZone.forEach(function (cardData) {
-        if (cardData.id === card.id) {
-          cardExists = true;
-          cardData.count++;
+  ['friendlyDeck', 'friendlyHand', 'friendlyPlay', 'friendlyGraveyard'].forEach(function (zone) {
+    var firstRun = true;
+    $scope[zone] = [];
+    $scope[zone + 'Zone'] = [];
+    $scope.$watchCollection(zone, function (current, previous) {
+
+      // Determine all cards that need to be added.
+      var toAdd = [];
+      current.forEach(function (card) {
+        var previouslyExists = false;
+        previous.forEach(function (previousCard) {
+          if (card === previousCard) {
+            previouslyExists = true;
+          }
+        });
+        if (!previouslyExists || firstRun) {
+          toAdd.push(card);
         }
       });
-      if (!cardExists) {
-        var cardInfo = cards[card.id];
-        var cost = cardInfo.hasOwnProperty('cost') ? cardInfo.cost : 0;
-        $scope.friendlyDeckZone.push({
-          id: card.id,
-          count: 1,
-          collectible: cardInfo.collectible,
-          playerClass: cardInfo.playerClass,
-          cost: cost,
-          type: cardInfo.type,
-          name: cardInfo.name
+      var toRemove = [];
+      previous.forEach(function (previousCard) {
+        var exists = false;
+        current.forEach(function (card) {
+          if (card === previousCard) {
+            exists = true;
+          }
         });
-      }
-    });
-  });
-  $scope.$watchCollection('friendlyHand', function (friendlyHand) {
-    $scope.friendlyHandZone.length = 0;
-    friendlyHand.forEach(function (card) {
-      var cardExists = false;
-      $scope.friendlyHandZone.forEach(function (cardData) {
-        if (cardData.id === card.id) {
-          cardExists = true;
-          cardData.count++;
+        if (!exists) {
+          toRemove.push(previousCard);
         }
       });
-      if (!cardExists) {
-        var cardInfo = cards[card.id];
-        var cost = cardInfo.hasOwnProperty('cost') ? cardInfo.cost : 0;
-        $scope.friendlyHandZone.push({
-          id: card.id,
-          count: 1,
-          collectible: cardInfo.collectible,
-          playerClass: cardInfo.playerClass,
-          cost: cost,
-          type: cardInfo.type,
-          name: cardInfo.name
+      toAdd.forEach(function (card) {
+        var cardExists = false;
+        $scope[zone + 'Zone'].forEach(function (cardData) {
+          if (cardData.id === card.id) {
+            cardExists = true;
+            cardData.count++;
+          }
         });
-      }
-    });
-  });
-  $scope.$watchCollection('friendlyPlay', function (friendlyPlay) {
-    $scope.friendlyPlayZone.length = 0;
-    friendlyPlay.forEach(function (card) {
-      var cardExists = false;
-      $scope.friendlyPlayZone.forEach(function (cardData) {
-        if (cardData.id === card.id) {
-          cardExists = true;
-          cardData.count++;
+        if (!cardExists) {
+          var cardInfo = cards[card.id];
+          var cost = cardInfo.hasOwnProperty('cost') ? cardInfo.cost : 0;
+          $scope[zone + 'Zone'].push({
+            id: card.id,
+            count: 1,
+            collectible: cardInfo.collectible,
+            playerClass: cardInfo.playerClass,
+            cost: cost,
+            type: cardInfo.type,
+            name: cardInfo.name
+          });
         }
       });
-      if (!cardExists) {
-        var cardInfo = cards[card.id];
-        var cost = cardInfo.hasOwnProperty('cost') ? cardInfo.cost : 0;
-        $scope.friendlyPlayZone.push({
-          id: card.id,
-          count: 1,
-          collectible: cardInfo.collectible,
-          playerClass: cardInfo.playerClass,
-          cost: cost,
-          type: cardInfo.type,
-          name: cardInfo.name
+      toRemove.forEach(function (card) {
+        $scope[zone + 'Zone'].forEach(function (cardData, index) {
+          if (cardData.id === card.id) {
+            if (cardData.count > 1) {
+              cardData.count--;
+            } else {
+              $scope[zone + 'Zone'].splice(index, 1);
+            }
+          }
         });
-      }
-    });
-  });
-  $scope.$watchCollection('friendlyGraveyard', function (friendlyGraveyard) {
-    $scope.friendlyGraveyardZone.length = 0;
-    friendlyGraveyard.forEach(function (card) {
-      var cardExists = false;
-      $scope.friendlyGraveyardZone.forEach(function (cardData) {
-        if (cardData.id === card.id) {
-          cardExists = true;
-          cardData.count++;
-        }
       });
-      if (!cardExists) {
-        var cardInfo = cards[card.id];
-        var cost = cardInfo.hasOwnProperty('cost') ? cardInfo.cost : 0;
-        $scope.friendlyGraveyardZone.push({
-          id: card.id,
-          count: 1,
-          collectible: cardInfo.collectible,
-          playerClass: cardInfo.playerClass,
-          cost: cost,
-          type: cardInfo.type,
-          name: cardInfo.name
-        });
-      }
-    });
-  });
-  $scope.$watchCollection('opposingDeck', function (opposingDeck) {
-    $scope.opposingDeckZone.length = 0;
-    opposingDeck.forEach(function (card) {
-      var cardExists = false;
-      $scope.opposingDeckZone.forEach(function (cardData) {
-        if (cardData.id === card.id) {
-          cardExists = true;
-          cardData.count++;
-        }
-      });
-      if (!cardExists) {
-        var cardInfo = cards[card.id];
-        var cost = cardInfo.hasOwnProperty('cost') ? cardInfo.cost : 0;
-        $scope.opposingDeckZone.push({
-          id: card.id,
-          count: 1,
-          collectible: cardInfo.collectible,
-          playerClass: cardInfo.playerClass,
-          cost: cost,
-          type: cardInfo.type,
-          name: cardInfo.name
-        });
-      }
-    });
-  });
-  $scope.$watchCollection('opposingHand', function (opposingHand) {
-    $scope.opposingHandZone.length = 0;
-    opposingHand.forEach(function (card) {
-      var cardExists = false;
-      $scope.opposingHandZone.forEach(function (cardData) {
-        if (cardData.id === card.id) {
-          cardExists = true;
-          cardData.count++;
-        }
-      });
-      if (!cardExists) {
-        var cardInfo = cards[card.id];
-        var cost = cardInfo.hasOwnProperty('cost') ? cardInfo.cost : 0;
-        $scope.opposingHandZone.push({
-          id: card.id,
-          count: 1,
-          collectible: cardInfo.collectible,
-          playerClass: cardInfo.playerClass,
-          cost: cost,
-          type: cardInfo.type,
-          name: cardInfo.name
-        });
-      }
-    });
-  });
-  $scope.$watchCollection('opposingPlay', function (opposingPlay) {
-    $scope.opposingPlayZone.length = 0;
-    opposingPlay.forEach(function (card) {
-      var cardExists = false;
-      $scope.opposingPlayZone.forEach(function (cardData) {
-        if (cardData.id === card.id) {
-          cardExists = true;
-          cardData.count++;
-        }
-      });
-      if (!cardExists) {
-        var cardInfo = cards[card.id];
-        var cost = cardInfo.hasOwnProperty('cost') ? cardInfo.cost : 0;
-        $scope.opposingPlayZone.push({
-          id: card.id,
-          count: 1,
-          collectible: cardInfo.collectible,
-          playerClass: cardInfo.playerClass,
-          cost: cost,
-          type: cardInfo.type,
-          name: cardInfo.name
-        });
-      }
-    });
-  });
-  $scope.$watchCollection('opposingGraveyard', function (opposingGraveyard) {
-    $scope.opposingGraveyardZone.length = 0;
-    opposingGraveyard.forEach(function (card) {
-      var cardExists = false;
-      $scope.opposingGraveyardZone.forEach(function (cardData) {
-        if (cardData.id === card.id) {
-          cardExists = true;
-          cardData.count++;
-        }
-      });
-      if (!cardExists) {
-        var cardInfo = cards[card.id];
-        var cost = cardInfo.hasOwnProperty('cost') ? cardInfo.cost : 0;
-        $scope.opposingGraveyardZone.push({
-          id: card.id,
-          count: 1,
-          collectible: cardInfo.collectible,
-          playerClass: cardInfo.playerClass,
-          cost: cost,
-          type: cardInfo.type,
-          name: cardInfo.name
-        });
-      }
+
+      // For some reason the first time this fires, current and previous are identical.
+      firstRun = false;
     });
   });
 

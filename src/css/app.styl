@@ -81,8 +81,7 @@ div.content
   top: 0
   //border-radius: 15px 15px 15px 15px
   backface-visibility: hidden
-  transition-property: -webkit-transform
-  transition-duration: .5s
+  transition: all .5s
   transform-origin: center center
   &.ng-leave
     transform: rotateY(0deg)
@@ -94,7 +93,7 @@ div.content
     transform: rotateY(-180deg)
     z-index: 10
   &.ng-enter-active
-    transform: rotateX(0deg)
+    transform: rotateY(0deg)
     z-index: 20
 
 div.deck-cover
@@ -268,26 +267,55 @@ div#deck-tracker
     height: calc(100% - 120px)
     position: relative
     margin-bottom: 15px
-    div
+    >div
       height: 100%
+      width: 100%
+      position: absolute
+      &.ng-hide-remove
+        -webkit-animation: slideInLeft .25s
+      &.ng-hide-add
+        -webkit-animation: slideOutRight .25s
       ul
         list-style: none
         text-align: center
         padding: 10px
         height: 100% 
+        width: 100%
+        position: absolute
+        top: 0
+        left: 0
         margin-bottom: 15px
         overflow: auto
         background-color: #000
         border: solid 1px darken(forecolor, 25%)
+        backface-visibility: hidden
+        transition: all .5s
+        transform-origin: center center
+        &.friendly-list
+          border: solid 1px darken(secondarycolor, 25%)
+        &.opposing-list
+          border: solid 1px darken(#f00, 25%)
+        &.ng-hide-add
+          transform: rotateY(0deg)
+          z-index: 20
+        &.ng-hide-add-active
+          transform: rotateY(180deg)
+          z-index: 10
+        &.ng-hide-remove
+          transform: rotateY(-180deg)
+          z-index: 10
+        &.ng-hide-remove-active
+          transform: rotateY(0deg)
+          z-index: 20
         li
           margin: 0
           padding: 0
           height: 32px
           position: relative
-        &.friendly-list
-          border: solid 1px darken(secondarycolor, 25%)
-        &.opposing-list
-          border: solid 1px darken(#f00, 25%)
+          &.ng-enter
+            -webkit-animation: lightSpeedIn 1s
+          &.ng-leave
+            -webkit-animation: lightSpeedOut 1s
   div.versus
     margin-bottom: 10px
     span.vs
