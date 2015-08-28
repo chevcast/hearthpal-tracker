@@ -54,7 +54,7 @@ module.exports = function (cards, $filter) {
         });
       });
 
-      element.on('typeahead:select', function (event, suggestedCard) {
+      element.on('typeahead:select typeahead:autocomplete', function (event, suggestedCard) {
         scope.$apply(function () {
           element.preventKeyUp = true;
           scope.suggestedCard = suggestedCard;
