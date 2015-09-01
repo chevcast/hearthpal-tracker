@@ -11,7 +11,7 @@ module.exports = function ($rootScope, $scope, $routeParams, mainWindow, cards, 
   $scope.deck = require(path.join(decksPath, $routeParams.deckFile));
 
   // Monitor tracking arrays and update zone display arrays.
-  ['friendlyDeck', 'friendlyHand', 'friendlyPlay', 'friendlyGraveyard'].forEach(function (zone) {
+  ['friendlyDeck', 'friendlyHand', 'friendlyPlay', 'friendlyGraveyard', 'opposingDeck', 'opposingHand', 'opposingPlay', 'opposingGraveyard'].forEach(function (zone) {
     var firstRun = true;
     $scope[zone] = [];
     $scope[zone + 'Zone'] = [];
@@ -106,9 +106,6 @@ module.exports = function ($rootScope, $scope, $routeParams, mainWindow, cards, 
 
   // Associate deck cards with reported entities, or add new cards.
   logWatcher.on('zone-change', function (data) {
-    if (data.cardName === 'The Coin') {
-      debugger;
-    }
     $scope.$apply(function () {
       // Overrid weapon and secret zones with the play zone and ignore hero and hero power zones.
       switch(data.zone) {
