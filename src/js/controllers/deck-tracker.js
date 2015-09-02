@@ -76,7 +76,6 @@ module.exports = function ($rootScope, $scope, $routeParams, mainWindow, cards, 
         });
       });
 
-      // For some reason the first time this fires, current and previous are identical.
       firstRun = false;
     });
   });
@@ -106,80 +105,77 @@ module.exports = function ($rootScope, $scope, $routeParams, mainWindow, cards, 
 
   // Associate deck cards with reported entities, or add new cards.
   logWatcher.on('zone-change', function (data) {
+    console.log('zone-change: ', data);
     $scope.$apply(function () {
       // Overrid weapon and secret zones with the play zone and ignore hero and hero power zones.
-      switch(data.zone) {
+      switch(data.toZone) {
         case 'SECRET':
         case 'PLAY (Weapon)':
-          data.zone = 'PLAY';
+          data.toZone = 'PLAY';
+          break;
+        case 'PLAY (Hero)':
+        case 'PLAY (Hero Power)':
+          return;
+      }
+      switch(data.fromZone) {
+        case 'SECRET':
+        case 'PLAY (Weapon)':
+          data.fromZone = 'PLAY';
           break;
         case 'PLAY (Hero)':
         case 'PLAY (Hero Power)':
           return;
       }
 
+      console.log('zone-change2: ', data);
+
       // Create new entity.
       var card = {
-        id: data.cardId,
-        entityId: data.entityId
+        id: data.cardId
       };
 
-      // Check all tracking arrays to see if entity exists.
-      // If it does, override card with the existing card.
-      var team = data.team.toLowerCase();
-      var newZone = team + data.zone.charAt(0).toUpperCase() + data.zone.slice(1).toLowerCase();
-      var entityFound = false;
+      // Remove card from previous zone.
+      if (data.fromTeam) {
+        var fromZone = data.fromTeam.toLowerCase() + data.fromZone.charAt(0).toUpperCase() + data.fromZone.slice(1).toLowerCase();
+        $scope[fromZone].forEach(function (zoneCard, index, zone) {
+          if (zoneCard.id === data.cardId) {
+            if (zoneCard.entityId === data.entityId) {
+              card = zoneCard;
+              console.log(data.cardName + ' found in ' + fromZone + '.');
+              zone.splice(index, 1);
+              console.log(data.cardName + ' removed from ' + fromZone + '.');
+            }
+          }
+        });
+      }
 
-      if (!entityFound && newZone !== team + 'Hand') {
-        $scope[team + 'Hand'].forEach(function (handCard, index, zone) {
-          if (handCard.id === data.cardId) {
-            if (handCard.entityId === data.entityId) {
-              card = handCard;
-              entityFound = true;
-              zone.splice(index, 1);
-            }
+      // If card is friendly and has no entityId then it either didn't have a fromZone or the card did not exist in any zones.
+      // In this case check our friendly deck to see if we have a card by the same name but not yet associated with an entityId.
+      // If so, associate it and remove it from the deck zone.
+      if (data.toTeam === 'FRIENDLY' && !card.hasOwnProperty('entityId')) {
+        console.log(data.cardName + ' has no entityId and is friendly.');
+        $scope.friendlyDeck.forEach(function (deckCard, index, friendlyDeck) {
+          if (deckCard.id === data.cardId && deckCard.entityId === null) {
+            deckCard.entityId = data.entityId;
+            card = deckCard;
+            console.log(data.cardName + ' has been associated with a card in our deck.');
+            friendlyDeck.splice(index, 1);
           }
         });
       }
-      if (!entityFound && newZone !== team + 'Play') {
-        $scope[team + 'Play'].forEach(function (playCard, index, zone) {
-          if (playCard.id === data.cardId) {
-            if (playCard.entityId === data.entityId) {
-              card = playCard;
-              entityFound = true;
-              zone.splice(index, 1);
-            }
-          }
-        });
-      }
-      if (!entityFound && newZone !== team + 'Graveyard') {
-        $scope[team + 'Graveyard'].forEach(function (graveCard, index, zone) {
-          if (graveCard.id === data.cardId) {
-            if (graveCard.entityId === data.entityId) {
-              card = graveCard;
-              entityFound = true;
-              zone.splice(index, 1);
-            }
-          }
-        });
-      }
-      if (!entityFound && newZone !== team + 'Deck') {
-        $scope[team + 'Deck'].forEach(function (deckCard, index, zone) {
-          if (deckCard.id === data.cardId) {
-            if (deckCard.entityId === null) {
-              deckCard.entityId = data.entityId;
-            }
-            if (deckCard.entityId === data.entityId) {
-              card = deckCard;
-              entityFound = true;
-              zone.splice(index, 1);
-            }
-          }
-        });
-      }
-      
+
       // Put card into new zone.
-      $scope[newZone].push(card);
+      if (data.toTeam) {
+        // If card still has no entityId then it was not found in a zone and was not associated with a card in our deck. Add the
+        // entityId from the zone change event and press forward.
+        if (!card.hasOwnProperty('entityId')) {
+          card.entityId = data.entityId;
+        }
+        var toZone = data.toTeam.toLowerCase() + data.toZone.charAt(0).toUpperCase() + data.toZone.slice(1).toLowerCase();
+        $scope[toZone].push(card);
+        console.log(data.cardName + ' has been added to ' + toZone + '.');
+      }
+
     });
   });
 
