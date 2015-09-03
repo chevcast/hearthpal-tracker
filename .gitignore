@@ -1,5 +1,8 @@
 node_modules/
 build/
+nw/
+www/
+overwolf/
 src/bower_components/
 release/
 cache/
