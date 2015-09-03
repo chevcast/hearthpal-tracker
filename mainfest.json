@@ -1,0 +1,29 @@
+{
+  "manifest_version":1,
+  "type":"WebApp",
+  "meta": {
+    "name":"Hearthpal Tracker",
+    "version":"1.0.0",
+    "minimum-overwolf-version":"0.77.10",
+    "author":"Alex Ford",
+    "description":"Hearthstone Deck Tracker"
+  },
+  "data": {
+    "start_window":"MainWindow",
+    "windows": {
+      "MainWindow": {
+        "file":"overwolf/index.html",
+        "transparent":false,
+        "resizable": true,
+        "size": {
+          "width":500,
+          "height":300
+        },
+        "min_size":{
+          "width":200,
+          "height":200
+        }
+      }
+    }
+  }
+}
