@@ -1,0 +1,19 @@
+
+<div id="deck-builder">
+  <div id="deckCover">
+    <div data-deck-cover="data-deck-cover" data-deck-class="{{deck.deckClass}}" data-deck-name="{{deck.name}}" data-ng-if="deck"></div><span class="card-count">{{totalCards}} cards</span>
+    <input id="deckName" type="text" data-ng-model="deck.name"/>
+  </div>
+  <div id="add">
+    <input id="cardField" type="text" placeholder="{{ totalCards &lt; 30 ? 'Enter card name...' : 'DECK FULL' }}" data-typeahead="data-typeahead" data-suggested-card="suggestedCard" data-card-selected="addCard($card)" data-ng-disabled="totalCards === 30"/>
+    <button id="addCard" title="Add Card" data-ng-disabled="!suggestedCard || totalCards === 30" data-ng-click="addCard(suggestedCard)" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+  </div>
+  <ul id="cards">
+    <li data-ng-repeat="card in cards | cardSort">
+      <div data-card-thumbnail="data-card-thumbnail" data-card-id="{{card.id}}" data-card-count="{{card.count}}"></div>
+      <div id="removeOverlay" data-ng-click="removeCard(card.id)"></div>
+    </li>
+  </ul>
+  <button data-ng-click="save()" data-ng-disabled="!deck.name" class="btn btn-success">Save</button>
+  <button data-ng-click="cancel()" class="btn btn-danger">Cancel</button>
+</div>

@@ -2,7 +2,7 @@
   "name": "@hearthpal/tracker",
   "version": "1.0.0",
   "description": "A node powered Hearthstone Deck Tracker.",
-  "main": "build/index.html",
+  "main": "nw/index.html",
   "window": {
     "title": "Hearthpal Tracker",
     "width": 275,
@@ -19,7 +19,8 @@
   "dependencies": {
     "bluebird": "^2.9.34",
     "hearthstone-log-watcher": "^3.0.1",
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "socket.io": "^1.3.6"
   },
   "devDependencies": {
     "colors": "^1.1.2",

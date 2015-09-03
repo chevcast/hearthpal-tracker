@@ -1,97 +1,78 @@
 doctype html
 html(data-ng-app="app")
   head
-    title Hearthtunnel Deck Tracker
-    link(href="./lib/animate.css/animate.css", rel="stylesheet")
-    link(href="./lib/bootstrap/dist/css/bootstrap-theme.css", rel="stylesheet")
-    link(href="./lib/bootstrap/dist/css/bootstrap.css", rel="stylesheet")
-    link(href="./css/app.css", rel="stylesheet")
-    if (env === "development")
+    title {{ title || 'Hearthtunnel Deck Tracker' }}
+    link(href=resolvePath("/lib/animate.css/animate.css"), rel="stylesheet")
+    link(href=resolvePath("/lib/bootstrap/dist/css/bootstrap-theme.css"), rel="stylesheet")
+    link(href=resolvePath("/lib/bootstrap/dist/css/bootstrap.css"), rel="stylesheet")
+    link(href=resolvePath("/css/app.css"), rel="stylesheet")
+    script(src=resolvePath("/lib/socket.io-client/socket.io.js"))
+    script(src=resolvePath("/lib/jquery/dist/jquery.js"))
+    script(src=resolvePath("/lib/typeahead.js/dist/typeahead.bundle.js"))
+    script(src=resolvePath("/lib/angular/angular.js"))
+    script(src=resolvePath("/lib/angular-route/angular-route.js"))
+    script(src=resolvePath("/lib/angular-animate/angular-animate.js"))
+    if (config.env === "development")
       script(src="http://localhost:35729/livereload.js")
-    script(src="./lib/jquery/dist/jquery.js")
-    script(src="./lib/typeahead.js/dist/typeahead.bundle.js")
-    script(src="./lib/angular/angular.js")
-    script(src="./lib/angular-route/angular-route.js")
-    script(src="./lib/angular-animate/angular-animate.js")
+    script(src=resolvePath("/js/app.js"))
+    script(src=resolvePath("/js/filters/card-sort.js"))
+    script(src=resolvePath("/js/filters/collectible.js"))
+    script(src=resolvePath("/js/services/cards.js"))
+    script(src=resolvePath("/js/services/socket-client.js"))
+    script(src=resolvePath("/js/services/utils.js"))
+    script(src=resolvePath("/js/directives/card-thumbnail.js"))
+    script(src=resolvePath("/js/directives/deck-cover.js"))
+    script(src=resolvePath("/js/directives/typeahead.js"))
+    script(src=resolvePath("/js/controllers/confirm.js"))
+    script(src=resolvePath("/js/controllers/deck-builder.js"))
+    script(src=resolvePath("/js/controllers/deck-tracker.js"))
+    script(src=resolvePath("/js/controllers/decks.js"))
+    script(src=resolvePath("/js/controllers/main.js"))
+    script(src=resolvePath("/js/controllers/new-deck.js"))
     script.
-      global.Bloodhound = window.Bloodhound;
-      var gui = require('nw.gui');
-      var mainWindow = gui.Window.get();
-      mainWindow.setMaximumSize(275, 3000);
-      mainWindow.setMinimumSize(275, 275);
-      mainWindow.redraw = function () {
-        this.resizeBy(0, 1);
-        this.resizeBy(0, -1);
+      var config = !{JSON.stringify(config)};
+      var resolvePath = function (path) {
+        if (config.target === 'nw') {
+          return '.' + path;
+        }
+        return path;
       };
+      if (config.target === 'nw') {
+        // Start the socket server.
+        require('./js/socket-server.js');
 
-      // Weird hack to fix copy/paste shortcuts on OS X.
-      if (process.platform === "darwin") {
-        var mb = new gui.Menu({type: 'menubar'});
-        mb.createMacBuiltin('RoboPaint', {
-          hideEdit: false,
-        });
-        mainWindow.menu = mb;
-      }
+        var gui = require('nw.gui');
+        var mainWindow = gui.Window.get();
 
-      //-mainWindow.focus();
-      //-var devTools = mainWindow.showDevTools();
-
-      // Clear module cache so livereload works with required modules.
-      Object.keys(global.require.cache).forEach(function (key) {
-        delete global.require.cache[key];
-      });
-
-      // Delcare our Angular app and relevant components.
-      var app = angular.module('app', ['ngRoute', 'ngAnimate']);
-      app.factory('mainWindow', function () {
-        return mainWindow;
-      });
-      app.factory('utils', require('./js/services/utils.js'));
-      app.factory('cards', require('./js/services/cards.js'));
-      app.filter('cardSort', require('./js/filters/card-sort.js'));
-      app.filter('collectible', require('./js/filters/collectible.js'));
-      app.directive('deckCover', require('./js/directives/deck-cover.js'));
-      app.directive('cardThumbnail', require('./js/directives/card-thumbnail.js'));
-      app.directive('typeahead', require('./js/directives/typeahead.js'));
-      app.controller('main', require('./js/controllers/main.js'));
-      app.controller('confirm', require('./js/controllers/confirm.js'));
-      app.controller('decks', require('./js/controllers/decks.js'));
-      app.controller('newDeck', require('./js/controllers/new-deck.js'));
-      app.controller('deckBuilder', require('./js/controllers/deck-builder.js'));
-      app.controller('deckTracker', require('./js/controllers/deck-tracker.js'));
-
-      // Configure Angular app routes.
-      app.config(function ($routeProvider) {
-        $routeProvider
-          .when('/decks', {
-            templateUrl: './templates/decks.html',
-            controller: 'decks'
-          })
-          .when('/confirm', {
-            templateUrl: './templates/confirm.html',
-            controller: 'confirm'
-          })
-          .when('/new-deck', {
-            templateUrl: './templates/new-deck.html',
-            controller: 'newDeck'
-          })
-          .when('/deck-builder/:mode/:deckFile', {
-            templateUrl: './templates/deck-builder.html',
-            controller: 'deckBuilder'
-          })
-          .when('/deck-tracker/:deckFile', {
-            templateUrl: './templates/deck-tracker.html',
-            controller: 'deckTracker'
-          })
-          .otherwise({
-            redirectTo: '/decks'
+        // Weird hack to fix copy/paste shortcuts on OS X.
+        if (process.platform === "darwin") {
+          var mb = new gui.Menu({type: 'menubar'});
+          mb.createMacBuiltin('RoboPaint', {
+            hideEdit: false,
           });
-      });
+          mainWindow.menu = mb;
+        }
+
+        mainWindow.focus();
+        mainWindow.showDevTools();
+
+        angular.module('app').run(function ($rootScope) {
+          $rootScope.$watch('title', function (title) {
+            mainWindow.title = title;
+          });
+          $rootScope.devTools = function (event) {
+            if (!event.ctrlKey || event.keyCode !== 68) {
+              return;
+            }
+            if (!mainWindow.isDevToolsOpen()) {
+              mainWindow.showDevTools();
+            } else {
+              mainWindow.closeDevTools();
+            }
+          };
+        });
+      }
   body(data-ng-controller="main", data-ng-keydown="devTools($event)")
-    div.title-bar.animated {{title}}
-      div#app-controls
-        span.glyphbutton.glyphicon.glyphicon-minus#minimize-app(data-ng-click="minimizeApp()")
-        span.glyphbutton.glyphicon.glyphicon-remove#close-app(data-ng-click="closeApp()")
     div.content(data-ng-view)
     div#spinner(data-ng-show="loading === true")
       div#overlay

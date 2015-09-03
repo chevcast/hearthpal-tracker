@@ -1,0 +1,11 @@
+
+<div id="decks">
+  <ul id="decks-list">
+    <li data-ng-show="decks.length === 0" class="text-center">
+      <h3>No decks.</h3>
+    </li>
+    <li data-ng-repeat="deck in decks track by $index">
+      <div data-deck-cover="data-deck-cover" data-deck-class="{{deck.deckClass}}" data-deck-name="{{deck.name}}" data-deck-file="{{deck.fileName}}" data-interactive="true" data-ng-click="go('/deck-tracker/' + deck.fileName)" title="Select {{deck.name}} Deck"></div>
+    </li>
+  </ul><span data-ng-click="go('/new-deck')" title="Add New Deck" class="new-deck glyphicon glyphicon-plus"></span>
+</div>

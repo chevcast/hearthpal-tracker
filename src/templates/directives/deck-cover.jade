@@ -9,7 +9,7 @@ div.deck-cover(data-ng-class="{ interactive: interactive }")
       title="Edit {{deckName}} Deck"
     )
   img.cover(
-    data-ng-src="./imgs/deck-covers/{{deckClass}}-deck.png",
+    data-ng-src=resolvePath("/imgs/deck-covers/{{deckClass}}-deck.png"),
     data-ng-class="{ interactive: interactive }"
   )
   span.name {{deckName}}

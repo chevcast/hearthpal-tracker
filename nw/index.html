@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html data-ng-app="app">
+  <head>
+    <title>{{ title || 'Hearthtunnel Deck Tracker' }}</title>
+    <link href="./lib/animate.css/animate.css" rel="stylesheet">
+    <link href="./lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="./css/app.css" rel="stylesheet">
+    <script src="./lib/socket.io-client/socket.io.js"></script>
+    <script src="./lib/jquery/dist/jquery.js"></script>
+    <script src="./lib/typeahead.js/dist/typeahead.bundle.js"></script>
+    <script src="./lib/angular/angular.js"></script>
+    <script src="./lib/angular-route/angular-route.js"></script>
+    <script src="./lib/angular-animate/angular-animate.js"></script>
+    <script src="http://localhost:35729/livereload.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/filters/card-sort.js"></script>
+    <script src="./js/filters/collectible.js"></script>
+    <script src="./js/services/cards.js"></script>
+    <script src="./js/services/socket-client.js"></script>
+    <script src="./js/services/utils.js"></script>
+    <script src="./js/directives/card-thumbnail.js"></script>
+    <script src="./js/directives/deck-cover.js"></script>
+    <script src="./js/directives/typeahead.js"></script>
+    <script src="./js/controllers/confirm.js"></script>
+    <script src="./js/controllers/deck-builder.js"></script>
+    <script src="./js/controllers/deck-tracker.js"></script>
+    <script src="./js/controllers/decks.js"></script>
+    <script src="./js/controllers/main.js"></script>
+    <script src="./js/controllers/new-deck.js"></script>
+    <script>
+      var config = {"env":"development","target":"nw"};
+      var resolvePath = function (path) {
+        if (config.target === 'nw') {
+          return '.' + path;
+        }
+        return path;
+      };
+      if (config.target === 'nw') {
+        // Start the socket server.
+        require('./js/socket-server.js');
+      
+        var gui = require('nw.gui');
+        var mainWindow = gui.Window.get();
+      
+        // Weird hack to fix copy/paste shortcuts on OS X.
+        if (process.platform === "darwin") {
+          var mb = new gui.Menu({type: 'menubar'});
+          mb.createMacBuiltin('RoboPaint', {
+            hideEdit: false,
+          });
+          mainWindow.menu = mb;
+        }
+      
+        mainWindow.focus();
+        mainWindow.showDevTools();
+      
+        angular.module('app').run(function ($rootScope) {
+          $rootScope.$watch('title', function (title) {
+            mainWindow.title = title;
+          });
+          $rootScope.devTools = function (event) {
+            if (!event.ctrlKey || event.keyCode !== 68) {
+              return;
+            }
+            if (!mainWindow.isDevToolsOpen()) {
+              mainWindow.showDevTools();
+            } else {
+              mainWindow.closeDevTools();
+            }
+          };
+        });
+      }
+    </script>
+  </head>
+  <body data-ng-controller="main" data-ng-keydown="devTools($event)">
+    <div data-ng-view class="content"></div>
+    <div id="spinner" data-ng-show="loading === true">
+      <div id="overlay"></div><img src="./imgs/spinner.gif">
+    </div>
+  </body>
+</html>
