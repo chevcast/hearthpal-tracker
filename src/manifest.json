@@ -6,22 +6,27 @@
     "version":"1.0.0",
     "minimum-overwolf-version":"0.77.10",
     "author":"Alex Ford",
+    "icon":"imgs/overwolf-icon.png",
+    "icon_gray":"imgs/overwolf-icon-gray.png",
     "description":"Hearthstone Deck Tracker"
   },
   "data": {
     "start_window":"MainWindow",
     "windows": {
       "MainWindow": {
-        "file":"overwolf/index.html",
+        "file":"index.html",
         "transparent":false,
         "resizable": true,
         "size": {
-          "width":500,
-          "height":300
+          "width":275,
+          "height":500
         },
         "min_size":{
-          "width":200,
-          "height":200
+          "width":275,
+          "height":275
+        },
+        "max_size":{
+          "width":275
         }
       }
     }

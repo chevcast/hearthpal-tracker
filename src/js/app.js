@@ -1,5 +1,5 @@
 angular.module('app', ['ngRoute','ngAnimate'])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $compileProvider) {
     $routeProvider
       .when('/decks', {
         templateUrl: resolvePath('/templates/decks.html'),
@@ -23,6 +23,10 @@ angular.module('app', ['ngRoute','ngAnimate'])
       })
       .otherwise({
         redirectTo: '/decks'
-      })
+      });
+      
+    // Holy crap this took forever to figure out. Angular hated the overwolf-extnesion prefix for URLs.
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*((https?|ftp|file|blob|overwolf-extension):|data:image\/)/);
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|overwolf-extension):/)
   });
 

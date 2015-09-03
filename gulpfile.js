@@ -29,7 +29,11 @@ gulp.task('build', [
   'compile-bower',
   'process-data',
   'process-card-images'
-]);
+], function () {
+  if (config.target === 'overwolf') {
+    gulp.src(srcDir + '/manifest.json').pipe(gulp.dest(buildDir));
+  }
+});
 
 // Find all Jade templates and compile them into HTML.
 gulp.task('compile-html', function () {
@@ -38,10 +42,12 @@ gulp.task('compile-html', function () {
     locals: {
       config: config,
       resolvePath: function (path) {
-        if (config.target === 'nw') {
-          return '.' + path;
+        switch (config.target) {
+          case 'nw':
+            return '.' + path;
+          default:
+            return path;
         }
-        return path;
       }
     }
   };

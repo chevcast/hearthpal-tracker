@@ -32,10 +32,12 @@ html(data-ng-app="app")
     script.
       var config = !{JSON.stringify(config)};
       var resolvePath = function (path) {
-        if (config.target === 'nw') {
-          return '.' + path;
+        switch (config.target) {
+          case 'nw':
+            return '.' + path;
+          default:
+            return path;
         }
-        return path;
       };
       if (config.target === 'nw') {
         // Start the socket server.
@@ -53,9 +55,6 @@ html(data-ng-app="app")
           mainWindow.menu = mb;
         }
 
-        mainWindow.focus();
-        mainWindow.showDevTools();
-
         angular.module('app').run(function ($rootScope) {
           $rootScope.$watch('title', function (title) {
             mainWindow.title = title;
@@ -72,8 +71,8 @@ html(data-ng-app="app")
           };
         });
       }
-  body(data-ng-controller="main", data-ng-keydown="devTools($event)")
-    div.content(data-ng-view)
-    div#spinner(data-ng-show="loading === true")
+  body(ng-controller="main", ng-keydown="devTools($event)")
+    div.content(ng-view)
+    div#spinner(ng-show="loading === true")
       div#overlay
-      img(src="./imgs/spinner.gif")
+      img(src=resolvePath("/imgs/spinner.gif"))

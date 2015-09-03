@@ -7,6 +7,9 @@
     "title": "Hearthpal Tracker",
     "width": 275,
     "height": 500,
+    "max_width": 275,
+    "min_width": 275,
+    "min_height": 275,
     "frame": true,
     "toolbar": false,
     "transparent": false

@@ -10,6 +10,7 @@ angular.module('app').directive('deckCover', function () {
     },
     templateUrl: resolvePath('/templates/directives/deck-cover.html'),
     controller: function ($scope, utils) {
+      $scope.classImageUrl = resolvePath('/imgs/deck-covers/' + $scope.deckClass.toLowerCase() + '-deck.png');
       $scope.go = utils.navigate;
     }
   }
