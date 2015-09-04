@@ -8,7 +8,9 @@ var decksPath = path.join(__dirname, '..', 'data', 'decks');
 if (!fs.existsSync(decksPath)) {
   fs.mkdirSync(decksPath);
 }
+console.log('Websocket server started.');
 io.on('connection', function (socket) {
+  console.log('Client has connected.');
   socket.on('error', console.error.bind(console));
   socket.on('getCards', function (data, cb) {
     cb(null, require('../data/cards.json'));
