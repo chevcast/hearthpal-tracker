@@ -31,6 +31,7 @@ html(data-ng-app="app")
     script(src=resolvePath("/js/controllers/new-deck.js"))
     script.
       var config = !{JSON.stringify(config)};
+      
       var resolvePath = function (path) {
         switch (config.target) {
           case 'nw':
@@ -39,6 +40,7 @@ html(data-ng-app="app")
             return path;
         }
       };
+      
       if (config.target === 'nw') {
         // Start the socket server.
         require('./js/socket-server.js');
@@ -54,24 +56,27 @@ html(data-ng-app="app")
           });
           mainWindow.menu = mb;
         }
+      }
 
-        angular.module('app').run(function ($rootScope) {
+      angular.module('app').run(function ($rootScope) {
+        if (config.target === 'nw') {
           $rootScope.$watch('title', function (title) {
             mainWindow.title = title;
           });
-          $rootScope.devTools = function (event) {
-            if (!event.ctrlKey || event.keyCode !== 68) {
-              return;
-            }
+        }
+        $rootScope.checkHotkey = function (event) {
+          if (event.ctrlKey && event.keyCode === 68 && config.target === 'nw') {
             if (!mainWindow.isDevToolsOpen()) {
               mainWindow.showDevTools();
             } else {
               mainWindow.closeDevTools();
             }
-          };
-        });
-      }
-  body(ng-controller="main", ng-keydown="devTools($event)")
+          } else if (event.ctrlKey) {
+            $rootScope.$emit('hotkey', event.keyCode);
+          }
+        };
+      });
+  body(ng-controller="main", ng-keydown="checkHotkey($event)")
     div.content(ng-view)
     div#spinner(ng-show="loading === true")
       div#overlay

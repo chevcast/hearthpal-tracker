@@ -1,4 +1,4 @@
-angular.module('app').controller('deckTracker', function ($rootScope, $scope, $routeParams, $route, cards, utils, socket) {
+angular.module('app').controller('deckTracker', function ($rootScope, $scope, $routeParams, $window, cards, utils, socket) {
   $rootScope.loading = true;
   cards.then(function (cards) {
     $rootScope.loading = false;
@@ -8,6 +8,24 @@ angular.module('app').controller('deckTracker', function ($rootScope, $scope, $r
     $scope.friendlyName = "Friendly Player";
     $scope.opposingName = "Opposing Player";
     $rootScope.loading = true;
+    
+    $rootScope.$on('hotkey', function (e, keyCode) {
+      switch (keyCode) {
+        case 49:
+          $scope.selectedZone = "deck";
+          break;
+        case 50:
+          $scope.selectedZone = "hand";
+          break;
+        case 51:
+          $scope.selectedZone = "play";
+          break;
+        case 52:
+          $scope.selectedZone = "grave";
+          break;
+      }
+    });
+    
     socket.perform('getDeck', $routeParams.deckFile, function (err, deck) {
       if (err) { return console.error(err); }
       $scope.deck = deck;
@@ -174,7 +192,7 @@ angular.module('app').controller('deckTracker', function ($rootScope, $scope, $r
       // Detect when game has finished and clean up data.
       socket.on('hlw:game-over', function (players) {
         socket.perform('stopLogWatcher', function () {
-          $route.reload();
+          $window.location.reload();
         });
       });
 

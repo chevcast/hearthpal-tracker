@@ -235,10 +235,14 @@ div#deck-tracker
   text-align: center
   height: 100%
   position: relative
-  select
-    margin-bottom: 5px
+  select.zone-selector
+    background-color: backcolor
+    color: forecolor
+    margin-bottom: 10px
+    border-radius: 5px
+    font-size: 12px
   div.zones
-    height: calc(100% - 120px)
+    height: calc(100% - 150px)
     position: relative
     margin-bottom: 15px
     >div
@@ -292,14 +296,17 @@ div#deck-tracker
           &.ng-leave
             -webkit-animation: lightSpeedOut 1s
   div.versus
-    margin-bottom: 10px
+    margin-bottom: 15px
     span.vs
-      font-size: 20px
-      margin: 0 5px 0 5px
+      font-size: 15px
+      margin-left: 5px
     button.btn
       outline: none
-      font-size: 8px
+      font-size: 11px
+      height: 50px
+      overflow: hidden
       width: 100px
+      white-space: normal
       &.selected
         border: solid 2px #fff
         font-weight: bold
