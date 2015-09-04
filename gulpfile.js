@@ -138,7 +138,7 @@ gulp.task('process-data', function () {
 });
 
 // Run all compile tasks, start a livereload server, and add some watcher messages.
-gulp.task('watch', function () {
+gulp.task('watch', ['build'], function () {
   // The change event is the same for all the watchers.
   var onChange = function (event) {
     var filePath = path.relative('./', event.path);

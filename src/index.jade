@@ -1,6 +1,12 @@
 doctype html
 html(data-ng-app="app")
   head
+    script.
+      // Override window functions with global.
+      window.setTimeout = global.setTimeout;
+      window.clearTimeout = global.clearTimeout;
+      window.setInterval = global.setInterval;
+      window.clearInterval = global.clearInterval;
     title {{ title || 'Hearthtunnel Deck Tracker' }}
     link(href=resolvePath("/lib/animate.css/animate.css"), rel="stylesheet")
     link(href=resolvePath("/lib/bootstrap/dist/css/bootstrap-theme.css"), rel="stylesheet")
