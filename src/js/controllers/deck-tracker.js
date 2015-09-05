@@ -191,7 +191,12 @@ angular.module('app').controller('deckTracker', function ($rootScope, $scope, $r
 
       // Detect when game has finished and clean up data.
       socket.on('hlw:game-over', function (players) {
-        socket.perform('stopLogWatcher', function () {
+        console.log('game over fired');
+        socket.removeAllListeners('hlw:game-start');
+        socket.removeAllListeners('hlw:zone-change');
+        socket.removeAllListeners('hlw:game-over');
+        socket.perform('stopLogWatcher', null, function () {
+          console.log('log watcher stopped');
           $window.location.reload();
         });
       });
@@ -199,6 +204,9 @@ angular.module('app').controller('deckTracker', function ($rootScope, $scope, $r
       socket.perform('startLogWatcher');
 
       $scope.done = function () {
+        socket.removeAllListeners('hlw:game-start');
+        socket.removeAllListeners('hlw:zone-change');
+        socket.removeAllListeners('hlw:game-over');
         socket.perform('stopLogWatcher', null, function () {
           utils.navigate('/decks');
         });

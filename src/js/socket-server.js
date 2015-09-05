@@ -60,6 +60,7 @@ io.on('connection', function (socket) {
   });
 
   socket.on('stopLogWatcher', function (data, cb) {
+    debugger;
     logWatcher.stop();
     cb();
   });

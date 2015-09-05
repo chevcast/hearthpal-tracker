@@ -1,4 +1,8 @@
-angular.module('app', ['ngRoute','ngAnimate'])
+var angularDependencies = ['ngRoute'];
+if (config.target !== 'nw') {
+  angularDependencies.push('ngAnimate');
+}
+angular.module('app', angularDependencies)
   .config(function ($routeProvider, $compileProvider) {
     $routeProvider
       .when('/decks', {
