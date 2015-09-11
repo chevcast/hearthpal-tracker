@@ -31,8 +31,19 @@ angular.module('app').controller('deckTracker', function ($rootScope, $scope, $r
       $scope.deck = deck;
       $rootScope.loading = false;
 
+      var zones = [
+        'friendlyDeck',
+        'friendlyHand',
+        'friendlyPlay',
+        'friendlyGraveyard',
+        'opposingDeck',
+        'opposingHand',
+        'opposingPlay',
+        'opposingGraveyard'
+      ];
+
       // Monitor tracking arrays and update zone display arrays.
-      ['friendlyDeck', 'friendlyHand', 'friendlyPlay', 'friendlyGraveyard', 'opposingDeck', 'opposingHand', 'opposingPlay', 'opposingGraveyard'].forEach(function (zone) {
+      zones.forEach(function (zone) {
         var firstRun = true;
         $scope[zone] = [];
         $scope[zone + 'Zone'] = [];
@@ -90,8 +101,10 @@ angular.module('app').controller('deckTracker', function ($rootScope, $scope, $r
               if (cardData.id === card.id) {
                 if (cardData.count > 1) {
                   cardData.count--;
-                } else {
+                } else if (zone !== 'friendlyDeck') {
                   $scope[zone + 'Zone'].splice(index, 1);
+                } else if (zone === 'friendlyDeck') {
+                  cardData.count = 0;
                 }
               }
             });
@@ -101,14 +114,15 @@ angular.module('app').controller('deckTracker', function ($rootScope, $scope, $r
         });
       });
 
-      //// Add all cards from deck to deck zone.
+      // Add all cards from deck to deck zone.
       Object.keys($scope.deck.cards).forEach(function (cardId) {
         var count = $scope.deck.cards[cardId];
         for (var i = 0; i < count; i++) {
-          $scope.friendlyDeck.push({
+          var deckCard = {
             id: cardId,
             entityId: null
-          });
+          };
+          $scope.friendlyDeck.push(deckCard);
         }
       });
 
@@ -146,18 +160,17 @@ angular.module('app').controller('deckTracker', function ($rootScope, $scope, $r
 
           // Create new entity.
           var card = {
-            id: data.cardId
+            id: data.cardId,
+            entityId: null
           };
 
           // Remove card from previous zone.
           if (data.fromTeam) {
             var fromZone = data.fromTeam.toLowerCase() + data.fromZone.charAt(0).toUpperCase() + data.fromZone.slice(1).toLowerCase();
             $scope[fromZone].forEach(function (zoneCard, index, zone) {
-              if (zoneCard.id === data.cardId) {
-                if (zoneCard.entityId === data.entityId) {
-                  card = zoneCard;
-                  zone.splice(index, 1);
-                }
+              if (zoneCard.entityId === data.entityId) {
+                card = zoneCard;
+                zone.splice(index, 1);
               }
             });
           }
@@ -165,7 +178,7 @@ angular.module('app').controller('deckTracker', function ($rootScope, $scope, $r
           // If card is friendly and has no entityId then it either didn't have a fromZone or the card did not exist in any zones.
           // In this case check our friendly deck to see if we have a card by the same name but not yet associated with an entityId.
           // If so, associate it and remove it from the deck zone.
-          if (data.toTeam === 'FRIENDLY' && !card.hasOwnProperty('entityId')) {
+          if (((data.fromTeam === 'FRIENDLY' && data.fromZone === 'DECK') || (!data.fromZone && data.toTeam === 'FRIENDLY' && data.toZone === 'HAND')) && card.entityId === null) {
             $scope.friendlyDeck.forEach(function (deckCard, index, friendlyDeck) {
               if (deckCard.id === data.cardId && deckCard.entityId === null) {
                 deckCard.entityId = data.entityId;
@@ -179,7 +192,7 @@ angular.module('app').controller('deckTracker', function ($rootScope, $scope, $r
           if (data.toTeam) {
             // If card still has no entityId then it was not found in a zone and was not associated with a card in our deck. Add the
             // entityId from the zone change event and press forward.
-            if (!card.hasOwnProperty('entityId')) {
+            if (card.entityId === null) {
               card.entityId = data.entityId;
             }
             var toZone = data.toTeam.toLowerCase() + data.toZone.charAt(0).toUpperCase() + data.toZone.slice(1).toLowerCase();
