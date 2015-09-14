@@ -18,15 +18,15 @@
         "transparent":false,
         "resizable": true,
         "size": {
-          "width":275,
+          "width":299,
           "height":500
         },
         "min_size":{
-          "width":275,
-          "height":275
+          "width":299,
+          "height":299
         },
         "max_size":{
-          "width":275
+          "width":299
         }
       }
     }
