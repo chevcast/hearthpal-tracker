@@ -16,6 +16,13 @@ Object.keys(cardSets).forEach(function (setName) {
 // Thank you Hearthhead for naming the card image URLs with the Hearthstone card ID.
 var recurse = function (cardId) {
   if (!cardId) return;
+  var imgPath = './src/imgs/cards/' + cardId + '.png';
+  // check if we already have an image for the card
+  if (fs.existsSync(imgPath)) {
+    console.log('Skipping ' + cardId + '...');
+    recurse(cardIds.shift());
+    return;
+  }
   console.log('Trying ' + cardId + '...');
   var uri = imageUrl.replace("{{cardId}}", cardId);
   request.head(uri, function(err, res, body){
@@ -35,7 +42,7 @@ var recurse = function (cardId) {
       console.log('Retrying ' + cardId + '...');
       recurse(cardId);
     }, 25000);
-    request(uri).pipe(fs.createWriteStream('./src/imgs/cards/' + cardId + '.png'))
+    request(uri).pipe(fs.createWriteStream(imgPath))
       .on('close', function () {
         if (!timedOut) {
           clearTimeout(timeoutId);
